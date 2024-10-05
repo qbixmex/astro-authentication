@@ -1,0 +1,56 @@
+---
+import { Icon } from 'astro-icon/components'
+
+type Link = {
+  url: string;
+  label: string;
+  iconName?: string;
+  iconPosition?: "left" | "right",
+  enabled?: boolean;
+};
+
+const links: Link[] = [
+ {
+  label: "Home",
+  url: "/",
+  iconName: "home",
+  iconPosition: "left",
+ },
+ {
+  label: "Login",
+  url: "/login",
+  iconName: "login",
+ },
+ {
+  label: "Logout",
+  url: "/logout",
+  iconName: "logout",
+  iconPosition: "right",
+  enabled: false,
+ },
+];
+---
+
+<nav class="flex justify-between px-20 py-10 items-center bg-white">
+  <h1 class="text-xl text-gray-800 font-bold">Astro</h1>
+  <div class="flex items-center">
+    <div class="flex items-center">
+      <Icon name="magnify" class="text-black text-xl" />
+      <input class="ml-2 outline-none bg-transparent font-" type="text" name="search" id="search" placeholder="Search..." />
+    </div>
+    <ul class="flex items-center space-x-6">
+      {links.map(({ label, url, iconName, iconPosition, enabled = true }) => (
+        enabled && (
+          <li class="font-semibold text-gray-700">
+            <a href={url} class:list={["flex items-center gap-2", {
+              "flex-row-reverse": iconPosition && iconPosition === "right",
+            }]}>
+              { iconName && <Icon name={iconName} class="text-xl" /> }
+              <span>{ label }</span>
+            </a>
+          </li>
+        )
+      ))}
+    </ul>
+  </div>
+</nav>

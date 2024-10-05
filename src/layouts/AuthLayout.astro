@@ -1,0 +1,76 @@
+---
+import Navbar from '@/components/shared/Navbar.astro';
+
+type Props = {
+	title: string;
+	description?: string;
+	robots?:
+		| "index, follow"
+		| "noindex, follow"
+		| "index, nofollow"
+		| "noindex, nofollow"
+	;
+};
+
+const {
+	title,
+	description = '',
+	robots = 'index, follow',
+} = Astro.props;
+const imageURL = "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1951&amp;q=80";
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="robots" content={robots} />
+	</head>
+	<body class="bg-slate-800">
+		<main>
+			<div id="mainWrapper" style={{ backgroundImage: `url(${imageURL})` }}>
+        <div id="background"></div>
+        <section id="content">
+          <div id="heroContainer">
+            <div id="heroWrapper">
+              <!-- <img src="" class="mb-3"> -->
+              <h1>Hi ! Welcome Back<br />John Doe</h1>
+              <p>Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups</p>
+            </div>
+          </div>
+          <slot />
+        </section>
+      </div>
+		</main>
+	</body>
+</html>
+
+<style>
+  #mainWrapper {
+    @apply bg-no-repeat bg-cover bg-center relative;
+  }
+  #background {
+    @apply absolute bg-gradient-to-b from-green-500 to-green-400 opacity-75 inset-0 z-0;
+  }
+  #content {
+    @apply min-h-screen sm:flex sm:flex-row mx-0 justify-center;
+  }
+  #heroContainer {
+    @apply flex flex-col self-center p-10 sm:max-w-5xl xl:max-w-2xl  z-10;
+  }
+  #heroWrapper {
+    @apply self-start hidden lg:flex flex-col  text-white;
+  }
+  #heroWrapper {
+    & h1 {
+      @apply mb-3 font-bold text-5xl;
+    }
+    & p {
+      @apply pr-3;
+    }
+  }
+</style>

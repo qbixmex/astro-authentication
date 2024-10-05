@@ -1,0 +1,37 @@
+---
+import Navbar from '@/components/shared/Navbar.astro';
+type Props = {
+	title: string;
+	description?: string;
+	robots?:
+		| "index, follow"
+		| "noindex, follow"
+		| "index, nofollow"
+		| "noindex, nofollow"
+	;
+};
+
+const {
+	title,
+	description = '',
+	robots = 'index, follow',
+} = Astro.props;
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="robots" content={robots} />
+	</head>
+	<body class="bg-slate-800 text-slate-50 min-h-screen">
+		<Navbar />
+		<main>
+			<slot />
+		</main>
+	</body>
+</html>
