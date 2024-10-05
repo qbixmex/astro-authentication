@@ -1,5 +1,6 @@
 ---
 import AuthLayout from "@/layouts/AuthLayout.astro";
+import "@/styles/login-register.css";
 ---
 
 <AuthLayout
@@ -14,13 +15,23 @@ import AuthLayout from "@/layouts/AuthLayout.astro";
         <p>Please sign in to your account.</p>
       </div>
       <div class="space-y-5">
-        <section class="space-y-2">
+        <section class="fieldContainer">
           <label class="formLabel">Email</label>
-          <input class="formInput" name="email" type="email" placeholder="mail@gmail.com" />
+          <input
+            class="formInput"
+            name="email"
+            type="email"
+            placeholder="mail@gmail.com"
+          />
         </section>
-        <section class="space-y-2">
+        <section class="fieldContainer">
           <label class="formLabel">Password</label>
-          <input class="formInput" name="password" type="password" placeholder="Enter your password" />
+          <input
+            class="formInput"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+          />
         </section>
         <section class="flex flex-col justify-center items-start gap-2">
           <div class="flex items-center">
@@ -28,12 +39,12 @@ import AuthLayout from "@/layouts/AuthLayout.astro";
             <label for="remember_me" class="formCheckboxLabel">Remember me</label>
           </div>
           <div class="text-sm">
-            <a href="#" class="text-green-800 hover:text-green-500 italic underline">
+            <a href="#" class="formLink">
               Forgot your password ?
             </a>
           </div>
           <div class="text-sm">
-            <a href="/register" class="text-green-800 hover:text-green-500 italic underline">
+            <a href="/register" class="formLink">
               Don't have an account ? Register
             </a>
           </div>
@@ -47,36 +58,3 @@ import AuthLayout from "@/layouts/AuthLayout.astro";
     </div>
   </section>
 </AuthLayout>
-
-<style>
-  #formWrapper {
-    @apply flex justify-center self-center z-10;
-  }
-  .formCard {
-    @apply w-full p-12 bg-white mx-auto rounded-2xl;
-  }
-  .formCardHeader {
-    @apply mb-4;
-    & h3 {
-      @apply font-semibold text-2xl text-gray-800;
-    }
-    & p {
-      @apply text-gray-500;
-    }
-  }
-  .formLabel {
-    @apply text-sm font-medium text-gray-700 tracking-wide;
-  }
-  .formInput {
-    @apply w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400;
-  }
-  .formCheckboxLabel {
-    @apply ml-2 block text-sm text-gray-800;
-  }
-  .formCheckboxInput {
-    @apply h-4 w-4 bg-blue-500 focus:ring-blue-400 border-gray-300 rounded;
-  }
-  .formSubmitBtn {
-    @apply w-full flex justify-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500;
-  }
-</style>

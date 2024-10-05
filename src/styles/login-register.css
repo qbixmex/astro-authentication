@@ -1,0 +1,36 @@
+#formWrapper {
+  @apply flex justify-center self-center z-10;
+}
+.formCard {
+  @apply w-full p-12 bg-white mx-auto rounded-2xl;
+}
+.formCardHeader {
+  @apply mb-4;
+  & h3 {
+    @apply font-semibold text-2xl text-gray-800;
+  }
+  & p {
+    @apply text-gray-500;
+  }
+}
+.fieldContainer {
+  @apply space-y-2;
+}
+.formLabel {
+  @apply text-sm font-medium text-gray-700 tracking-wide;
+}
+.formInput {
+  @apply w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400;
+}
+.formCheckboxLabel {
+  @apply ml-2 block text-sm text-gray-800;
+}
+.formCheckboxInput {
+  @apply h-4 w-4 bg-blue-500 focus:ring-blue-400 border-gray-300 rounded;
+}
+.formLink {
+  @apply text-green-800 hover:text-green-500 italic underline;
+}
+.formSubmitBtn {
+  @apply w-full flex justify-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500;
+}
