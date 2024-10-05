@@ -17,9 +17,17 @@ const links: Link[] = [
   iconPosition: "left",
  },
  {
+  label: "Protected",
+  url: "/protected",
+  iconName: "protected-page",
+  iconPosition: "left",
+  enabled: true,
+ },
+ {
   label: "Login",
   url: "/login",
   iconName: "login",
+  enabled: true,
  },
  {
   label: "Logout",
@@ -40,7 +48,7 @@ const links: Link[] = [
     </div>
     <ul class="flex items-center space-x-6">
       {links.map(({ label, url, iconName, iconPosition, enabled = true }) => (
-        enabled && (
+        (enabled === true) && (
           <li class="font-semibold text-gray-700">
             <a href={url} class:list={["flex items-center gap-2", {
               "flex-row-reverse": iconPosition && iconPosition === "right",
