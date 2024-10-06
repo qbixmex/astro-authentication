@@ -1,5 +1,8 @@
 import { defineAction, ActionError } from "astro:actions";
 import { z } from "astro:content";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { firebase } from "@/firebase/config";
+import type { AuthError } from "firebase/auth";
 
 const registerUser = defineAction({
   accept: "form",
@@ -29,21 +32,31 @@ const registerUser = defineAction({
     } else {
       context.cookies.delete("email", { path: "/" });
     }
-
-    if (!context.cookies.has('user-session')) {
-      throw new ActionError({
-        code: "UNAUTHORIZED",
-        message: "User must be logged in.",
-      });
-    }
     
     try {
+      const user = await createUserWithEmailAndPassword(
+        firebase.auth,
+        input.email,
+        input.password
+      );
+
+      // TODO: Update display name
+      // TODO: Check email verification
+
+      console.log(user);
       return {
         ok: true,
-        message: "User registered successfully 👍",
+        message: "User registered successfully 🎉",
       };
     } catch (error) {
-      console.error(error);
+      const firebaseError = error as AuthError;
+
+      if (firebaseError.code === "auth/email-already-in-use") {
+        throw new Error('Email is already in use !');
+      }
+
+      console.log((error as Error).message);
+
       throw new Error('Something went wrong 😢, check server logs ⚠️');
     }
   },

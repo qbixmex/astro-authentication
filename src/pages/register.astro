@@ -85,7 +85,7 @@ const rememeberMe = !!email;
               id="submit"
               type="submit"
               class="formSubmitBtn"
-            >Sign in</button>
+            >register</button>
           </section>
         </div>
       </form>
@@ -112,7 +112,6 @@ const rememeberMe = !!email;
     const passwordConfirmationError = document.getElementById("password-confirmation-error") as HTMLParagraphElement;
 
     if (isInputError(error)) {
-
       if (error.fields.name) {
         nameError.classList.remove("hidden");
         nameError.innerText = error.fields.name.join(', ');
@@ -149,10 +148,16 @@ const rememeberMe = !!email;
       return;
     }
 
-    console.table(data);
+    if (error) {
+      console.error(error);
+      submitBtn.removeAttribute("disabled");
+      return;
+    }
 
-    setTimeout(() => {
-      submitBtn.removeAttribute("disabled")
-    }, 5000);
+    console.log(data);
+
+    form.reset();
+
+    submitBtn.removeAttribute("disabled")
   });
 </script>
