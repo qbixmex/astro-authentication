@@ -37,3 +37,6 @@
 .formSubmitBtn:disabled {
   @apply disabled:bg-gray-300 disabled:hover:bg-gray-300 disabled:cursor-wait;
 }
+.errorMessage {
+  @apply text-red-500 pl-2 italic;
+}
