@@ -95,6 +95,7 @@ const rememeberMe = !!email;
 
 <script>
   import { actions, isInputError } from "astro:actions";
+  import Swal from "sweetalert2";
 
   const form = document.getElementById("form") as HTMLFormElement;
   const submitBtn = document.getElementById("submit") as HTMLButtonElement;
@@ -149,15 +150,19 @@ const rememeberMe = !!email;
     }
 
     if (error) {
-      console.error(error);
+      Swal.fire({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "Close",
+      });
       submitBtn.removeAttribute("disabled");
       return;
     }
 
-    console.log(data);
-
     form.reset();
-
     submitBtn.removeAttribute("disabled")
+
+    window.location.replace("/protected");
   });
 </script>
