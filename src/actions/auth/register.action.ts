@@ -13,13 +13,20 @@ const registerUser = defineAction({
     message: "Passwords don't match !",
     path: ["password_confirmation"],
   }),
-  handler: async (form) => {
+  handler: async (input, context) => {
+
+    if (input.email) {
+      context.cookies.set("email", input.email, {
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365), //? 1 year
+        path: "/",
+      });
+    } else {
+      context.cookies.delete("email", { path: "/" });
+    }
+
     return {
-      "name": form.name,
-      "email": form.email,
-      "password": form.password,
-      "password-confirmation": form.password_confirmation,
-      "remember-me": form.remember_me,
+      ok: true,
+      message: "User registered successfully 👍",
     };
   },
 });

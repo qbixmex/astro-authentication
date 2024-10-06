@@ -1,6 +1,9 @@
 ---
 import AuthLayout from "@/layouts/AuthLayout.astro";
 import "@/styles/login-register.css";
+
+const email = Astro.cookies.get("email")?.value ?? "";
+const rememeberMe = !!email;
 ---
 
 <AuthLayout
@@ -23,7 +26,6 @@ import "@/styles/login-register.css";
               name="name"
               type="text"
               placeholder="John Doe"
-              value="Michael Jackson"
             />
           </section>
           <section class="fieldContainer">
@@ -33,7 +35,7 @@ import "@/styles/login-register.css";
               name="email"
               type="email"
               placeholder="mail@gmail.com"
-              value="michael@moonwalker.com"
+              value={email}
             />
           </section>
           <section class="fieldContainer">
@@ -43,7 +45,6 @@ import "@/styles/login-register.css";
               name="password"
               type="password"
               placeholder="Enter your password"
-              value="anie_are_you_ok"
             />
           </section>
           <section class="fieldContainer">
@@ -53,12 +54,17 @@ import "@/styles/login-register.css";
               name="password_confirmation"
               type="password"
               placeholder="Repeat password"
-              value="anie_are_you_ok"
             />
           </section>
           <section class="flex flex-col justify-center gap-3">
             <div class="flex items-center gap-1">
-              <input id="remember_me" name="remember_me" type="checkbox" class="formCheckboxInput" checked />
+              <input
+                id="remember_me"
+                name="remember_me"
+                type="checkbox"
+                class="formCheckboxInput"
+                checked={rememeberMe}
+              />
               <label for="remember_me" class="formCheckboxLabel">Remember me</label>
             </div>
             <div class="text-sm">
@@ -101,6 +107,8 @@ import "@/styles/login-register.css";
 
     console.table(data);
 
-    submitBtn.removeAttribute("disabled");
+    setTimeout(() => {
+      submitBtn.removeAttribute("disabled")
+    }, 5000);
   });
 </script>
