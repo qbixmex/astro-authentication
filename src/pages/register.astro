@@ -14,54 +14,93 @@ import "@/styles/login-register.css";
         <h3>Register</h3>
         <p>Enter your credentials for your new account.</p>
       </div>
-      <div class="space-y-5">
-        <section class="fieldContainer">
-          <label class="formLabel">Name</label>
-          <input
-            class="formInput"
-            name="name"
-            type="text"
-            placeholder="John Doe"
-          />
-        </section>
-        <section class="fieldContainer">
-          <label class="formLabel">Email</label>
-          <input
-            class="formInput"
-            name="email"
-            type="email"
-            placeholder="mail@gmail.com"
-          />
-        </section>
-        <section class="fieldContainer">
-          <label class="formLabel">Password</label>
-          <input
-            class="formInput"
-            name="password"
-            type="password"
-            placeholder="Enter your password"
-          />
-        </section>
-        <section class="fieldContainer">
-          <label class="formLabel">Password Confirmation</label>
-          <input
-            class="formInput"
-            name="password_confirmation"
-            type="password"
-            placeholder="Repeat password"
-          />
-        </section>
-        <section class="text-sm">
-          <a href="/login" class="formLink">
-            Already have an account ?
-          </a>
-      </section>
-      <section>
-        <button type="submit" class="formSubmitBtn">
-          Sign in
-        </button>
-      </section>
-      </div>
+      <form id="form" action="">
+        <div class="space-y-5">
+          <section class="fieldContainer">
+            <label class="formLabel">Name</label>
+            <input
+              class="formInput"
+              name="name"
+              type="text"
+              placeholder="John Doe"
+              value="Michael Jackson"
+            />
+          </section>
+          <section class="fieldContainer">
+            <label class="formLabel">Email</label>
+            <input
+              class="formInput"
+              name="email"
+              type="email"
+              placeholder="mail@gmail.com"
+              value="michael@moonwalker.com"
+            />
+          </section>
+          <section class="fieldContainer">
+            <label class="formLabel">Password</label>
+            <input
+              class="formInput"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              value="anie_are_you_ok"
+            />
+          </section>
+          <section class="fieldContainer">
+            <label class="formLabel">Password Confirmation</label>
+            <input
+              class="formInput"
+              name="password_confirmation"
+              type="password"
+              placeholder="Repeat password"
+              value="anie_are_you_ok"
+            />
+          </section>
+          <section class="flex flex-col justify-center gap-3">
+            <div class="flex items-center gap-1">
+              <input id="remember_me" name="remember_me" type="checkbox" class="formCheckboxInput" checked />
+              <label for="remember_me" class="formCheckboxLabel">Remember me</label>
+            </div>
+            <div class="text-sm">
+              <a href="/login" class="formLink">
+                Already have an account ?
+              </a>
+            </div>
+          </section>
+          <section>
+            <button
+              id="submit"
+              type="submit"
+              class="formSubmitBtn"
+            >Sign in</button>
+          </section>
+        </div>
+      </form>
     </div>
   </section>
 </AuthLayout>
+
+<script>
+  import { actions } from "astro:actions";
+
+  const form = document.getElementById("form") as HTMLFormElement;
+  const submitBtn = document.getElementById("submit") as HTMLButtonElement;
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    submitBtn.setAttribute("disabled", "true");
+
+    const formData = new FormData(form);
+
+    const { data, error } = await actions.registerUser(formData);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    console.table(data);
+
+    submitBtn.removeAttribute("disabled");
+  });
+</script>

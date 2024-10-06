@@ -17,5 +17,21 @@ export const onRequest = defineMiddleware((context, next) => {
 });
 
 const checkAuth = (authHeaders: string, next: MiddlewareNext) => {
-  return next();
+  if (!authHeaders) {
+    const authValue = authHeaders.split(' ').at(-1) ?? 'user:pass';
+    const decodedValue = atob(authValue).split(':');
+    const [ user, password ] = decodedValue;
+    
+    if (user === "admin" && password === "admin") {
+      return next();
+    }
+  }
+
+  return new Response('Forbidden Page', {
+    status: 401,
+    headers: {
+      'WWW-Authenticate': 'Basic realm="Secure Area"',
+      charset: "UTF-8"
+    }
+  });
 };
