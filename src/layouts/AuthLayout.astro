@@ -1,5 +1,6 @@
 ---
-import Navbar from '@/components/shared/Navbar.astro';
+import { Image } from 'astro:assets';
+import laptopDesktop from "@/assets/images/laptop-desktop.jpg";
 
 type Props = {
 	title: string;
@@ -17,7 +18,6 @@ const {
 	description = '',
 	robots = 'index, follow',
 } = Astro.props;
-const imageURL = "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1951&amp;q=80";
 ---
 
 <html lang="es">
@@ -32,7 +32,12 @@ const imageURL = "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?i
 	</head>
 	<body class="bg-slate-800">
 		<main>
-			<div id="mainWrapper" style={{ backgroundImage: `url(${imageURL})` }}>
+			<div id="mainWrapper">
+        <Image
+          src={laptopDesktop}
+          alt="A bird."
+          class="w-full h-full absolute inset-0 z-0 object-cover"
+        />
         <div id="background"></div>
         <section id="content">
           <div id="heroContainer">
@@ -54,7 +59,7 @@ const imageURL = "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?i
     @apply bg-no-repeat bg-cover bg-center relative;
   }
   #background {
-    @apply absolute bg-gradient-to-b from-green-500 to-green-400 opacity-75 inset-0 z-0;
+    @apply absolute bg-gradient-to-b from-slate-900 to-slate-500 opacity-75 inset-0 z-0;
   }
   #content {
     @apply min-h-screen sm:flex sm:flex-row mx-0 justify-center;

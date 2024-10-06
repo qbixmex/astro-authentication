@@ -6,7 +6,6 @@ const privateRoutes = [
 ];
 
 export const onRequest = defineMiddleware((context, next) => {
-
   const authHeaders = context.request.headers.get('authorization') ?? '';
 
   if (privateRoutes.includes(context.url.pathname)) {
