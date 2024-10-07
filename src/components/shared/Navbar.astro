@@ -1,8 +1,7 @@
 ---
-import { firebase } from '@/firebase/config';
-import { Icon } from 'astro-icon/components'
+import { Icon } from 'astro-icon/components';
 
-const firebaseUser = firebase.auth.currentUser;
+const { isLoggedIn } = Astro.locals;
 ---
 
 <nav class="flex justify-between px-20 py-10 items-center bg-white">
@@ -19,13 +18,7 @@ const firebaseUser = firebase.auth.currentUser;
           <span>Home</span>
         </a>
       </li>
-      <li id="protected" class="font-semibold text-gray-700">
-        <a href="/protected" class="flex items-center gap-2">
-          <Icon name="protected-page" class="text-xl" />
-          <span>Protected</span>
-        </a>
-      </li>
-      {!firebaseUser && (
+      {!isLoggedIn && (
         <li id="login" class="font-semibold text-gray-700">
           <a href="/login" class="flex items-center gap-2">
             <Icon name="login" class="text-xl" />
@@ -33,7 +26,13 @@ const firebaseUser = firebase.auth.currentUser;
           </a>
         </li>
       )}
-      {firebaseUser && (
+      {isLoggedIn && (
+        <li id="protected" class="font-semibold text-gray-700">
+          <a href="/protected" class="flex items-center gap-2">
+            <Icon name="protected-page" class="text-xl" />
+            <span>Protected</span>
+          </a>
+        </li>
         <li id="logout" class="font-semibold text-gray-700">
           <a href="#" class="flex items-center gap-2">
             <span>Logout</span>

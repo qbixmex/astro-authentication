@@ -1,20 +1,29 @@
 import type { MiddlewareNext } from "astro";
 import { defineMiddleware } from "astro:middleware";
+import { firebase } from "./firebase/config";
 
 const privateRoutes = [
   '/protected',
 ];
 
-export const onRequest = defineMiddleware((context, next) => {
-  const authHeaders = context.request.headers.get('authorization') ?? '';
+export const onRequest = defineMiddleware(
+  (context, next) => {
+    const isLoggedIng = !!firebase.auth.currentUser;
+    const user = firebase.auth.currentUser;
 
-  if (privateRoutes.includes(context.url.pathname)) {
-    return checkAuth(authHeaders, next);
+    //* Assign to locals the user authenticated status.
+    context.locals.isLoggedIn = isLoggedIng;
+
+    //* Assign to locals the user data from authenticated user.
+    if (user) {
+      context.locals.user = {
+        displayName: user.displayName!,
+        email: user.email!,
+        emailVerified: user.emailVerified,
+        avatar: user.photoURL ?? '',
+      }
+    }
+
+    return next();
   }
-
-  return next();
-});
-
-const checkAuth = (authHeaders: string, next: MiddlewareNext) => {
-  return next();
-};
+);

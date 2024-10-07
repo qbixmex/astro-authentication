@@ -1,5 +1,19 @@
 /// <reference path="../.astro/types.d.ts" />
 
+interface User {
+  displayName: string;
+  email: string;
+  emailVerified: boolean;
+  avatar: string;
+}
+
+declare namespace App {
+  interface Locals {
+    isLoggedIn: boolean;
+    user: User | null;
+  }
+}
+
 interface ImportMetaEnv {
   readonly PUBLIC_API_KEY: string;
   readonly PUBLIC_AUTH_DOMAIN: string;
@@ -13,10 +27,3 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
-
-
-
-
-
-
-
