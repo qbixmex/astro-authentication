@@ -6,6 +6,12 @@ const privateRoutes = [
   '/protected',
 ];
 
+const notAuthenticatedRoutes = [
+  '/home',
+  '/login',
+  '/register',
+];
+
 export const onRequest = defineMiddleware(
   (context, next) => {
     const isLoggedIng = !!firebase.auth.currentUser;
@@ -22,6 +28,14 @@ export const onRequest = defineMiddleware(
         emailVerified: user.emailVerified,
         avatar: user.photoURL ?? '',
       }
+    }
+
+    if (!isLoggedIng && privateRoutes.includes(context.url.pathname)) {
+      return context.redirect('/login');
+    }
+
+    if (isLoggedIng && notAuthenticatedRoutes.includes(context.url.pathname)) {
+      return context.redirect('/');
     }
 
     return next();
