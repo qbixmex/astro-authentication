@@ -1,6 +1,7 @@
 ---
 import AuthLayout from "@/layouts/AuthLayout.astro";
 import "@/styles/login-register.css";
+import { Icon } from "astro-icon/components";
 
 const email = Astro.cookies.get("email")?.value ?? "";
 const rememeberMe = !!email;
@@ -41,9 +42,15 @@ const rememeberMe = !!email;
               </a>
             </div>
           </section>
-          <section>
+          <section class="flex flex-col items-center gap-3">
             <button id="submit" type="submit" class="formSubmitBtn">
-              Sign in
+              Authenticate
+              <Icon name="paper-plane" size={22} />
+            </button>
+            <div class="divisor"></div>
+            <button id="google" type="button" class="googleBtn">
+              Google
+              <Icon name="google" size={22} />
             </button>
           </section>
         </div>
@@ -53,11 +60,14 @@ const rememeberMe = !!email;
 </AuthLayout>
 
 <script>
+  import { firebase } from "@/firebase/config";
   import { actions, isInputError } from "astro:actions";
+  import { GoogleAuthProvider, signInWithPopup, type AuthError } from "firebase/auth";
   import Swal from "sweetalert2";
 
   const form = document.getElementById("form") as HTMLFormElement;
   const submitBtn = document.getElementById("submit") as HTMLButtonElement;
+  const googleBtn = document.getElementById("google") as HTMLButtonElement;
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -107,5 +117,51 @@ const rememeberMe = !!email;
     submitBtn.removeAttribute("disabled")
 
     window.location.replace("/protected");
+  });
+
+  
+  googleBtn.addEventListener("click", async () => {
+    const provider = new GoogleAuthProvider();
+
+    googleBtn.setAttribute("disabled", "true");
+    googleBtn.innerText = "loading ...";
+
+    try {
+      // 1. Get credentials from client side.
+      const credentials = await signInWithPopup(
+        firebase.auth,
+        provider
+      );
+
+      // 2. Verify credentials on server side.
+      const { error } = await actions.loginGoogle(credentials);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      googleBtn.innerText = "Logged Successfully";
+      googleBtn.removeAttribute("disabled");
+
+      window.location.replace("/protected");
+    } catch (error) {
+      const firebaseError = error as AuthError;
+      let errorMessage: string = "";
+
+      if (firebaseError.code === "auth/operation-not-allowed") {
+        errorMessage = 'Operation not allowed !';
+      }
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      Swal.fire({
+        title: "Error",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonText: "Close",
+      });
+    }
   });
 </script>

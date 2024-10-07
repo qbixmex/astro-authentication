@@ -1,4 +1,4 @@
-import { defineAction, ActionError } from "astro:actions";
+import { defineAction } from "astro:actions";
 import { z } from "astro:content";
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { firebase } from "@/firebase/config";

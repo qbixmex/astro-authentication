@@ -2,10 +2,11 @@
 import { firebase } from '@/firebase/config';
 import MainLayout from '@/layouts/MainLayout.astro';
 import { Icon } from 'astro-icon/components';
+import type { User } from 'firebase/auth';
 
 const firebaseUser = firebase.auth.currentUser;
 
-if (firebaseUser === null) {
+if (!firebaseUser) {
 	return Astro.redirect('/login');
 }
 
@@ -14,10 +15,9 @@ const {
 	email,
 	emailVerified,
 	photoURL,
-} = firebaseUser;
+} = firebaseUser as User;
 
-await firebaseUser.reload();
-
+await (firebaseUser as User).reload();
 const userName = displayName ?? 'No name provided';
 ---
 
@@ -46,7 +46,7 @@ const userName = displayName ?? 'No name provided';
 			"bg-green-600": emailVerified,
 			"bg-red-600": !emailVerified,
 		}]}>Email {emailVerified ? "" : "not"} verified</div>
-		<div class="text-center mt-2 font-light text-base text-blue-700 italic">{email}</div>
+		<div class="text-center mt-2 font-medium text-slate-700 italic">{email}</div>
 		<div class="px-6 text-center mt-2 font-light text-sm">
 			<p>Full Stack Web Developer, passionate about learning new technologies and building new technologies.</p>
 		</div>
