@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components'
 
 type Link = {
+  id: string;
   url: string;
   label: string;
   iconName?: string;
@@ -11,30 +12,31 @@ type Link = {
 
 const links: Link[] = [
  {
+  id: "home",
   label: "Home",
   url: "/",
   iconName: "home",
   iconPosition: "left",
  },
  {
+  id: "protected",
   label: "Protected",
   url: "/protected",
   iconName: "protected-page",
   iconPosition: "left",
-  enabled: true,
  },
  {
+  id: "login",
   label: "Login",
   url: "/login",
   iconName: "login",
-  enabled: true,
  },
  {
+  id: "logout",
   label: "Logout",
-  url: "/logout",
+  url: "#",
   iconName: "logout",
   iconPosition: "right",
-  enabled: false,
  },
 ];
 ---
@@ -47,18 +49,32 @@ const links: Link[] = [
       <input class="ml-2 outline-none bg-transparent font-" type="text" name="search" id="search" placeholder="Search..." />
     </div>
     <ul class="flex items-center space-x-6">
-      {links.map(({ label, url, iconName, iconPosition, enabled = true }) => (
-        (enabled === true) && (
-          <li class="font-semibold text-gray-700">
-            <a href={url} class:list={["flex items-center gap-2", {
-              "flex-row-reverse": iconPosition && iconPosition === "right",
-            }]}>
-              { iconName && <Icon name={iconName} class="text-xl" /> }
-              <span>{ label }</span>
-            </a>
-          </li>
-        )
-      ))}
+      {links.map(({ id, label, url, iconName, iconPosition, enabled = true }) => {
+        // enabled = (url === "/protected") ? false : true;
+        if (enabled) {
+          return (
+            <li id={id} class="font-semibold text-gray-700">
+              <a href={url} class:list={["flex items-center gap-2", {
+                "flex-row-reverse": iconPosition && iconPosition === "right",
+              }]}>
+                { iconName && <Icon name={iconName} class="text-xl" /> }
+                <span>{ label }</span>
+              </a>
+            </li>
+          );
+        }
+      })}
     </ul>
   </div>
 </nav>
+
+<script>
+import { actions } from "astro:actions";
+
+const logoutElement = document.getElementById("logout") as HTMLLIElement;
+
+logoutElement.addEventListener("click", () => {
+  actions.logoutSession();
+  window.location.replace("/login");
+});
+</script>
