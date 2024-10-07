@@ -1,60 +1,111 @@
 ---
 import AuthLayout from "@/layouts/AuthLayout.astro";
 import "@/styles/login-register.css";
+
+const email = Astro.cookies.get("email")?.value ?? "";
+const rememeberMe = !!email;
 ---
 
-<AuthLayout
-  title="Login"
-  description="Login to your account"
-  robots="noindex, nofollow"
->
+<AuthLayout title="Login" description="Login to your account" robots="noindex, nofollow">
   <section id="formWrapper">
     <div class="formCard">
       <div class="formCardHeader">
         <h3>Login</h3>
         <p>Please sign in to your account.</p>
       </div>
-      <div class="space-y-5">
-        <section class="fieldContainer">
-          <label class="formLabel">Email</label>
-          <input
-            class="formInput"
-            name="email"
-            type="email"
-            placeholder="mail@gmail.com"
-          />
-        </section>
-        <section class="fieldContainer">
-          <label class="formLabel">Password</label>
-          <input
-            class="formInput"
-            name="password"
-            type="password"
-            placeholder="Enter your password"
-          />
-        </section>
-        <section class="flex flex-col justify-center items-start gap-2">
-          <div class="flex items-center">
-            <input id="remember_me" name="remember_me" type="checkbox" class="formCheckboxInput" />
-            <label for="remember_me" class="formCheckboxLabel">Remember me</label>
-          </div>
-          <div class="text-sm">
-            <a href="#" class="formLink">
-              Forgot your password ?
-            </a>
-          </div>
-          <div class="text-sm">
-            <a href="/register" class="formLink">
-              Don't have an account ? Register
-            </a>
-          </div>
-        </section>
-        <section>
-          <button type="submit" class="formSubmitBtn">
-            Sign in
-          </button>
-      </section>
-      </div>
+      <form id="form">
+        <div class="space-y-5">
+          <section class="fieldContainer">
+            <label class="formLabel">Email</label>
+            <input class="formInput" name="email" type="email" placeholder="mail@gmail.com" value={email ?? "" } />
+            <p id="email-error" class="errorMessage hidden"></p>
+          </section>
+          <section class="fieldContainer">
+            <label class="formLabel">Password</label>
+            <input class="formInput" name="password" type="password" placeholder="Enter your password" />
+            <p id="password-error" class="errorMessage hidden"></p>
+          </section>
+          <section class="flex flex-col justify-center items-start gap-2">
+            <div class="flex items-center">
+              <input id="remember_me" name="remember_me" type="checkbox" class="formCheckboxInput" checked={rememeberMe} />
+              <label for="remember_me" class="formCheckboxLabel">Remember me</label>
+            </div>
+            <div class="text-sm">
+              <a href="#" class="formLink">
+                Forgot your password ?
+              </a>
+            </div>
+            <div class="text-sm">
+              <a href="/register" class="formLink">
+                Don't have an account ? Register
+              </a>
+            </div>
+          </section>
+          <section>
+            <button id="submit" type="submit" class="formSubmitBtn">
+              Sign in
+            </button>
+          </section>
+        </div>
+      </form>
     </div>
   </section>
 </AuthLayout>
+
+<script>
+  import { actions, isInputError } from "astro:actions";
+  import Swal from "sweetalert2";
+
+  const form = document.getElementById("form") as HTMLFormElement;
+  const submitBtn = document.getElementById("submit") as HTMLButtonElement;
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    submitBtn.setAttribute("disabled", "true");
+
+    const formData = new FormData(form);
+
+    const { error } = await actions.loginUser(formData);
+    const emailError = document.getElementById("email-error") as HTMLParagraphElement;
+    const passwordError = document.getElementById("password-error") as HTMLParagraphElement;
+
+    if (isInputError(error)) {
+      if (error.fields.email) {
+        emailError.classList.remove("hidden");
+        emailError.innerText = error.fields.email.join(', ');
+      } else {
+        emailError.classList.add("hidden");
+        emailError.innerText = "";
+      }
+
+      if (error.fields.password) {
+        passwordError.classList.remove("hidden");
+        passwordError.innerText = error.fields.password.join(', ');
+      } else {
+        passwordError.classList.add("hidden");
+        passwordError.innerText = "";
+      }
+
+      submitBtn.removeAttribute("disabled");
+      return;
+    }
+
+    if (error) {
+      Swal.fire({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "Close",
+      });
+
+      submitBtn.removeAttribute("disabled");
+
+      return;
+    }
+
+    form.reset();
+    submitBtn.removeAttribute("disabled")
+
+    window.location.replace("/protected");
+  });
+</script>
