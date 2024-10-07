@@ -1,6 +1,6 @@
 import { defineAction, ActionError } from "astro:actions";
 import { z } from "astro:content";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { firebase } from "@/firebase/config";
 import type { AuthError } from "firebase/auth";
 
@@ -24,7 +24,7 @@ const registerUser = defineAction({
   }),
   handler: async (input, context) => {
     //* Cookies
-    if (input.email) {
+    if (input.remember_me) {
       context.cookies.set("email", input.email, {
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365), //? 1 year
         path: "/",
@@ -34,16 +34,22 @@ const registerUser = defineAction({
     }
     
     try {
-      const user = await createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
         firebase.auth,
         input.email,
         input.password
       );
 
-      // TODO: Update display name
-      // TODO: Check email verification
+      //* Update display name
+      updateProfile(firebase.auth.currentUser!, {
+        displayName: input.name
+      });
 
-      console.log(user);
+      //* Check email verification
+      await sendEmailVerification(firebase.auth.currentUser!, {
+        url: "http://localhost:4321/protected?emailVerified=true",
+      });
+
       return {
         ok: true,
         message: "User registered successfully 🎉",

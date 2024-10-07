@@ -17,7 +17,7 @@ const loginUser = defineAction({
   }),
   handler: async (input, context) => {
     //* Cookies
-    if (input.email) {
+    if (input.remember_me) {
       context.cookies.set("email", input.email, {
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365), //? 1 year
         path: "/",
@@ -27,14 +27,11 @@ const loginUser = defineAction({
     }
     
     try {
-      const user = await signInWithEmailAndPassword(
+      await signInWithEmailAndPassword(
         firebase.auth,
         input.email,
         input.password
       );
-
-      // TODO: Update display name
-      // TODO: Check email verification
 
       return {
         ok: true,

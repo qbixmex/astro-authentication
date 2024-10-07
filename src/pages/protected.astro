@@ -12,8 +12,12 @@ if (firebaseUser === null) {
 const {
 	displayName,
 	email,
+	emailVerified,
 	photoURL,
 } = firebaseUser;
+
+await firebaseUser.reload();
+
 const userName = displayName ?? 'No name provided';
 ---
 
@@ -38,7 +42,11 @@ const userName = displayName ?? 'No name provided';
 			)
 		}
 		<div class="text-center mt-2 text-3xl font-medium">{userName}</div>
-		<div class="text-center mt-2 font-light text-base text-gray-500 italic">{email}</div>
+		<div class:list={["text-center mt-2 text-xl font-light text-white w-fit mx-auto px-4 py-1 rounded-lg", {
+			"bg-green-600": emailVerified,
+			"bg-red-600": !emailVerified,
+		}]}>Email {emailVerified ? "" : "not"} verified</div>
+		<div class="text-center mt-2 font-light text-base text-blue-700 italic">{email}</div>
 		<div class="px-6 text-center mt-2 font-light text-sm">
 			<p>Full Stack Web Developer, passionate about learning new technologies and building new technologies.</p>
 		</div>
