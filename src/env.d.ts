@@ -15,6 +15,7 @@ declare namespace App {
 }
 
 interface ImportMetaEnv {
+  readonly PUBLIC_DOMAIN: string;
   readonly PUBLIC_API_KEY: string;
   readonly PUBLIC_AUTH_DOMAIN: string;
   readonly PUBLIC_PROJECT_ID: string;
