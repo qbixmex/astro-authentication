@@ -152,6 +152,10 @@ const rememeberMe = !!email;
         errorMessage = 'Operation not allowed !';
       }
 
+      if (firebaseError.code === "auth/unauthorized-domain") {
+        errorMessage = 'Unauthorized domain !';
+      }
+
       if (error instanceof Error) {
         errorMessage = error.message;
       }
