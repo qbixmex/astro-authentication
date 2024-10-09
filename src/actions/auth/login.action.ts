@@ -1,6 +1,6 @@
 import { defineAction } from "astro:actions";
 import { z } from "astro:content";
-import { sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { firebase } from "@/firebase/config";
 import type { AuthError } from "firebase/auth";
 

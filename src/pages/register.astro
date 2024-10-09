@@ -103,7 +103,7 @@ const rememeberMe = !!email;
 
     const formData = new FormData(form);
 
-    const { data, error } = await actions.registerUser(formData);
+    const { error } = await actions.registerUser(formData);
     const nameError = document.getElementById("name-error") as HTMLParagraphElement;
     const emailError = document.getElementById("email-error") as HTMLParagraphElement;
     const passwordError = document.getElementById("password-error") as HTMLParagraphElement;

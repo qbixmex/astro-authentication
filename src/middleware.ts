@@ -1,4 +1,3 @@
-import type { MiddlewareNext } from "astro";
 import { defineMiddleware } from "astro:middleware";
 import { firebase } from "./firebase/config";
 
